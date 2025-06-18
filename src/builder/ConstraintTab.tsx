@@ -1,4 +1,6 @@
 import { useState } from 'react';
+import SummationWidget from './SummationWidget';
+import { SetDef } from './SetTab';
 
 export interface ConstraintDef {
   lhs: string;
@@ -9,9 +11,10 @@ export interface ConstraintDef {
 interface Props {
   constraints: ConstraintDef[];
   onChange: (c: ConstraintDef[]) => void;
+  sets: SetDef[];
 }
 
-export default function ConstraintTab({ constraints, onChange }: Props) {
+export default function ConstraintTab({ constraints, onChange, sets }: Props) {
   const [form, setForm] = useState<ConstraintDef>({ lhs: '', comp: '<=', rhs: '' });
 
   const addConst = () => {
@@ -33,6 +36,8 @@ export default function ConstraintTab({ constraints, onChange }: Props) {
         <input value={form.rhs} onChange={e => setForm({ ...form, rhs: e.target.value })} className="flex-grow p-1 border rounded" placeholder="Right-hand expression" />
         <button onClick={addConst} className="px-2 py-1 rounded bg-teal text-white">Add</button>
       </div>
+      <SummationWidget sets={sets} onInsert={expr => setForm(f => ({ ...f, lhs: f.lhs ? f.lhs + ' ' + expr : expr }))} />
+      <SummationWidget sets={sets} onInsert={expr => setForm(f => ({ ...f, rhs: f.rhs ? f.rhs + ' ' + expr : expr }))} />
       <ul className="list-disc ml-4">
         {constraints.map((c, idx) => (
           <li key={idx}>{c.lhs} {c.comp} {c.rhs}</li>

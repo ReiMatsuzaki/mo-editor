@@ -13,16 +13,14 @@ interface Props {
 }
 
 export default function Preview({ sets, params, vars, objective, constraints }: Props) {
-  const latex = `\\begin{align}\n` +
-    sets.map(s => `${s.name} &= \{${s.members.join(', ')}\}`).join('\\\\\n') +
-    (sets.length ? '\n' : '') +
-    params.map(p => `${p.name}${p.set ? `_{${p.set}}` : ''} &= ${p.values.join(', ')}`).join('\\\\\n') +
-    (params.length ? '\n' : '') +
-    `${objective.sense === 'max' ? 'max' : 'min'} && ${objective.expr} \\\n` +
-    vars.map(v => `${v.name}${v.index ? `_{${v.index}}` : ''} ${v.lb || v.ub ? `\\in [${v.lb || '-\\infty'}, ${v.ub || '+\\infty'}]` : ''}`).join('\\\\\n') +
-    (vars.length ? '\n' : '') +
-    constraints.map(c => `${c.lhs} ${c.comp} ${c.rhs}`).join('\\\\\n') +
-    '\\end{align}';
+  const lines: string[] = [];
+  lines.push(...sets.map(s => `${s.name} &= \{${s.members.join(', ')}\}`));
+  lines.push(...params.map(p => `${p.name}${p.set ? `_{${p.set}}` : ''} &= ${p.values.join(', ')}`));
+  lines.push(`${objective.sense === 'max' ? 'max' : 'min'} && ${objective.expr}`);
+  lines.push(...vars.map(v => `${v.name}${v.index ? `_{${v.index}}` : ''} ${v.lb || v.ub ? `\\in [${v.lb || '-\\infty'}, ${v.ub || '+\\infty'}]` : ''}`));
+  lines.push(...constraints.map(c => `${c.lhs} ${c.comp} ${c.rhs}`));
+
+  const latex = `\\begin{align}\n` + lines.map(l => `${l} \\`).join('\n') + '\n\\end{align}';
 
   useEffect(() => {
     if ((window as any).MathJax) (window as any).MathJax.typeset();
