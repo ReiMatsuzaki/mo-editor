@@ -11,7 +11,9 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-      - run: npm ci && npm run build
+      # Use npm install to generate a lock file if one does not exist
+      # npm ci requires package-lock.json which is not stored in the repo
+      - run: npm install && npm run build
       - uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
