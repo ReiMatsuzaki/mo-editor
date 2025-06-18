@@ -25,13 +25,14 @@ knapsack instance as follows:
 2. **Parameters** – add `weights[Items]` with values `4,6,8`, `values[Items]`
    with values `10,20,30` and a scalar `total_weight = 30`.
 3. **Variables** – add `x[Items]` and choose `Binary` as its type.
-4. **Objective** – choose *Maximize* and enter `sum_{i in Items} values[i] * x[i]`.
+4. **Objective** – choose *Maximize* and use the expression builder to create `sum_{i in Items} values[i] * x[i]`.
 
 The **Preview** panel will show the resulting model in LaTeX form.
 
 ## Deploy
 
 Push to `main` and GitHub Actions will build and publish the `dist` folder to GitHub Pages.
+Pull requests are also built and published under `pr-<number>` for preview.
 
 ## TODO
 - Switch to BrowserRouter + 404.html redirect for prettier URLs.
