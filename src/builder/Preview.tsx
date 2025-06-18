@@ -18,7 +18,7 @@ export default function Preview({ sets, params, vars, objective, constraints }: 
     (sets.length ? '\n' : '') +
     params.map(p => `${p.name}${p.set ? `_{${p.set}}` : ''} &= ${p.values.join(', ')}`).join('\\\\\n') +
     (params.length ? '\n' : '') +
-    `${objective.sense === 'max' ? 'max' : 'min'} && ${objective.expr} \\` +
+    `${objective.sense === 'max' ? 'max' : 'min'} && ${objective.expr} \\\n` +
     vars.map(v => `${v.name}${v.index ? `_{${v.index}}` : ''} ${v.lb || v.ub ? `\\in [${v.lb || '-\\infty'}, ${v.ub || '+\\infty'}]` : ''}`).join('\\\\\n') +
     (vars.length ? '\n' : '') +
     constraints.map(c => `${c.lhs} ${c.comp} ${c.rhs}`).join('\\\\\n') +
