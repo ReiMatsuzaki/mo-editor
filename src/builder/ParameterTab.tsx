@@ -17,12 +17,37 @@ export default function ParameterTab({ params, onChange, sets }: Props) {
   const [name, setName] = useState('');
   const [setNameSel, setSetNameSel] = useState<string>('');
   const [val, setVal] = useState('');
+  const [valsText, setValsText] = useState('');
 
-  const addScalar = () => {
+  const parseValues = (text: string): string[] => {
+    const trimmed = text.trim();
+    if (!trimmed) return [];
+    const rangeMatch = trimmed.match(/^(-?\d+)\s*-\s*(-?\d+)$/);
+    if (rangeMatch) {
+      const start = parseInt(rangeMatch[1], 10);
+      const end = parseInt(rangeMatch[2], 10);
+      const step = start <= end ? 1 : -1;
+      const res: string[] = [];
+      for (let i = start; step > 0 ? i <= end : i >= end; i += step) {
+        res.push(i.toString());
+      }
+      return res;
+    }
+    return trimmed.split(/[ ,\n\t]+/).map(s => s.trim()).filter(Boolean);
+  };
+
+  const addParam = () => {
     if (!name) return;
-    onChange([...params, { name, set: setNameSel || null, values: [val] }]);
+    if (setNameSel) {
+      const values = parseValues(valsText);
+      if (values.length === 0) return;
+      onChange([...params, { name, set: setNameSel, values }]);
+    } else {
+      onChange([...params, { name, set: null, values: [val] }]);
+    }
     setName('');
     setVal('');
+    setValsText('');
   };
 
   const handleFile = (files: FileList | null) => {
@@ -53,17 +78,23 @@ export default function ParameterTab({ params, onChange, sets }: Props) {
           </select>
         </div>
         {setNameSel ? (
-          <div>
-            <label className="block text-sm">Values CSV</label>
-            <input type="file" accept=".csv" onChange={e => handleFile(e.target.files)} />
-          </div>
+          <>
+            <div>
+              <label className="block text-sm">Values</label>
+              <input value={valsText} onChange={e => setValsText(e.target.value)} placeholder="e.g. 1,2,3" className="p-1 border rounded" />
+            </div>
+            <div>
+              <label className="block text-sm">or CSV</label>
+              <input type="file" accept=".csv" onChange={e => handleFile(e.target.files)} />
+            </div>
+          </>
         ) : (
           <div>
             <label className="block text-sm">Value</label>
             <input value={val} onChange={e => setVal(e.target.value)} className="p-1 border rounded" />
           </div>
         )}
-        <button onClick={addScalar} className="px-2 py-1 rounded bg-teal text-white">Add</button>
+        <button onClick={addParam} className="px-2 py-1 rounded bg-teal text-white">Add</button>
       </div>
       <ul className="list-disc ml-4">
         {params.map((p, idx) => (
