@@ -2,6 +2,8 @@ name: Deploy
 on:
   push:
     branches: [ main ]
+  pull_request:
+    branches: [ main ]
 permissions:
   contents: write
 
@@ -17,6 +19,14 @@ jobs:
       # npm ci requires package-lock.json which is not stored in the repo
       - run: npm install && npm run build
       - uses: peaceiris/actions-gh-pages@v4
+        if: github.event_name == 'push'
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./dist
+      - uses: peaceiris/actions-gh-pages@v4
+        if: github.event_name == 'pull_request'
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
+          destination_dir: pr-${{ github.event.number }}
+          keep_files: true

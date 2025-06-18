@@ -19,8 +19,20 @@ export default function BuilderPage() {
       <SetTab sets={sets} onChange={setSets} />
       <ParameterTab params={params} onChange={setParams} sets={sets} />
       <VariableTab vars={vars} onChange={setVars} sets={sets} />
-      <ObjectiveTab objective={objective} onChange={setObjective} sets={sets} />
-      <ConstraintTab constraints={constraints} onChange={setConstraints} sets={sets} />
+      <ObjectiveTab
+        objective={objective}
+        onChange={setObjective}
+        sets={sets}
+        params={params}
+        vars={vars}
+      />
+      <ConstraintTab
+        constraints={constraints}
+        onChange={setConstraints}
+        sets={sets}
+        params={params}
+        vars={vars}
+      />
       <Preview sets={sets} params={params} vars={vars} objective={objective} constraints={constraints} />
     </div>
   );
