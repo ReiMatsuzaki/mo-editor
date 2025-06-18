@@ -3,6 +3,5 @@ import react from '@vitejs/plugin-react';
 
 export default defineConfig({
   base: '/mo-editor/',
-  root: 'public',
   plugins: [react()]
 });
