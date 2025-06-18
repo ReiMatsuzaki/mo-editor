@@ -1,9 +1,18 @@
+import SummationWidget from './SummationWidget';
+import { SetDef } from './SetTab';
+
 interface Objective {
   sense: 'max' | 'min';
   expr: string;
 }
 
-export default function ObjectiveTab({ objective, onChange }: { objective: Objective; onChange: (o: Objective) => void }) {
+interface Props {
+  objective: Objective;
+  onChange: (o: Objective) => void;
+  sets: SetDef[];
+}
+
+export default function ObjectiveTab({ objective, onChange, sets }: Props) {
   return (
     <div className="p-4 bg-white/60 rounded-lg shadow space-y-2">
       <h3 className="font-semibold">Objective</h3>
@@ -14,6 +23,7 @@ export default function ObjectiveTab({ objective, onChange }: { objective: Objec
         </select>
         <input value={objective.expr} onChange={e => onChange({ ...objective, expr: e.target.value })} className="flex-grow p-1 border rounded" placeholder="e.g. sum_i c[i] x[i]" />
       </div>
+      <SummationWidget sets={sets} onInsert={expr => onChange({ ...objective, expr: (objective.expr ? objective.expr + ' ' : '') + expr })} />
     </div>
   );
 }
