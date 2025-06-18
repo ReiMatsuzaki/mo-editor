@@ -1,15 +1,29 @@
 import { useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
 
+import { parseKnapsackCSV } from '../models/knapsack';
+import { parseAssignmentCSV } from '../models/assignment';
+
 interface Props {
   model: 'knapsack' | 'assignment';
+  onData: (data: any) => void;
 }
 
-export default function FileUploader({ model }: Props) {
-  const onDrop = useCallback((accepted: File[]) => {
-    // TODO parse CSV and store in context
-    console.log('files', accepted);
-  }, []);
+export default function FileUploader({ model, onData }: Props) {
+  const onDrop = useCallback(
+    (accepted: File[]) => {
+      const file = accepted[0];
+      if (!file) return;
+      file.text().then(text => {
+        const data =
+          model === 'knapsack'
+            ? parseKnapsackCSV(text)
+            : parseAssignmentCSV(text);
+        onData(data);
+      });
+    },
+    [model, onData]
+  );
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop, accept: { 'text/csv': ['.csv'] } });
 
