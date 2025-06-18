@@ -2,9 +2,6 @@ import { useMemo, useState } from 'react';
 import FileUploader from '../components/FileUploader';
 import ResultPanel from '../components/ResultPanel';
 import EditableTable from '../components/EditableTable';
-import VariableTab from '../builder/VariableTab';
-import ObjectiveTab from '../builder/ObjectiveTab';
-import ConstraintTab from '../builder/ConstraintTab';
 import { KnapsackData, solveKnapsack } from '../models/knapsack';
 
 export default function KnapsackPage() {
@@ -30,9 +27,6 @@ export default function KnapsackPage() {
       <h2 className="text-xl font-semibold text-navy">Knapsack Problem</h2>
       <FileUploader model="knapsack" onData={handleData} />
       {data && <EditableTable data={data.items} columns={columns} />}
-      <VariableTab />
-      <ObjectiveTab />
-      <ConstraintTab />
       <ResultPanel solution={solution} />
     </div>
   );

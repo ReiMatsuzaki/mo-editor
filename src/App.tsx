@@ -2,12 +2,14 @@ import { Routes, Route, Link } from 'react-router-dom';
 import Home from './pages/Home';
 import KnapsackPage from './pages/KnapsackPage';
 import AssignmentPage from './pages/AssignmentPage';
+import BuilderPage from './pages/BuilderPage';
 
 export default function App() {
   return (
     <div className="min-h-screen p-4 bg-gradient-to-br from-white to-cyan-50 text-gray-800">
       <nav className="mb-4 space-x-4 text-teal-600">
         <Link to="/">Home</Link>
+        <Link to="/builder">Builder</Link>
         <Link to="/knapsack">Knapsack</Link>
         <Link to="/assignment">Assignment</Link>
       </nav>
@@ -15,6 +17,7 @@ export default function App() {
         <Route path="/" element={<Home />} />
         <Route path="/knapsack" element={<KnapsackPage />} />
         <Route path="/assignment" element={<AssignmentPage />} />
+        <Route path="/builder" element={<BuilderPage />} />
       </Routes>
     </div>
   );
